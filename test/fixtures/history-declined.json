@@ -1,0 +1,29 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "102290129340398",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": { "display_phone_number": "15550001111", "phone_number_id": "106540352242922" },
+            "history": [
+              {
+                "errors": [
+                  {
+                    "code": 2593109,
+                    "title": "History sync is turned off by the business",
+                    "message": "History sync is turned off by the business",
+                    "error_data": { "details": "Business turned off history sharing" }
+                  }
+                ]
+              }
+            ]
+          },
+          "field": "history"
+        }
+      ]
+    }
+  ]
+}

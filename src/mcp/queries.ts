@@ -154,12 +154,21 @@ export async function resolveChat(db: DB, input: { chat_id?: number; contact?: s
       .executeTakeFirst()
     return row ? { ok: true, chat_id: row.id, name: row.name, wa_id: row.wa_id } : { ok: false, reason: 'not_found', candidates: [] }
   }
-  const matches = (await findContacts(db, input.contact ?? '', 5)).filter((m) => m.chat_id != null)
+  const query = input.contact ?? ''
+  const matches = (await findContacts(db, query, 5)).filter((m) => m.chat_id != null)
   const [first, second] = matches
   if (!first) return { ok: false, reason: 'not_found', candidates: [] }
-  // Exact phone match or a clear winner resolves directly; otherwise let the caller pick.
-  const exact = matches.find((m) => m.score >= 1)
-  const pick = exact ?? (!second || first.score - second.score >= 0.2 ? first : undefined)
+
+  // Resolve directly only when there's no doubt: a unique phone match, a unique exact name,
+  // or a clear winner. Otherwise hand the candidates back so the caller can pick.
+  const digits = query.replace(/\D/g, '')
+  const fold = (s: string) => s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim()
+  const byPhone = digits.length >= 7 ? matches.filter((m) => m.wa_id.endsWith(digits)) : []
+  const byName = matches.filter((m) => fold(m.name) === fold(query))
+  const pick =
+    (byPhone.length === 1 ? byPhone[0] : undefined) ??
+    (byName.length === 1 ? byName[0] : undefined) ??
+    (!second || first.score - second.score >= 0.2 ? first : undefined)
   if (!pick) return { ok: false, reason: 'ambiguous', candidates: matches }
   return { ok: true, chat_id: pick.chat_id!, name: pick.name, wa_id: pick.wa_id }
 }

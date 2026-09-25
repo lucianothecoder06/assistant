@@ -1,0 +1,31 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "102290129340398",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": { "display_phone_number": "15550001111", "phone_number_id": "106540352242922" },
+            "state_sync": [
+              {
+                "type": "contact",
+                "contact": { "full_name": "María José Hernández", "first_name": "María José", "phone_number": "5215512345678" },
+                "action": "add",
+                "metadata": { "timestamp": "1790000000" }
+              },
+              {
+                "type": "contact",
+                "contact": { "full_name": "Jorge Ramírez (Mesas)", "first_name": "Jorge", "phone_number": "5213398765432" },
+                "action": "add",
+                "metadata": { "timestamp": "1790000000" }
+              }
+            ]
+          },
+          "field": "smb_app_state_sync"
+        }
+      ]
+    }
+  ]
+}

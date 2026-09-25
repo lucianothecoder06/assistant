@@ -123,7 +123,7 @@ async function applyMessage(tx: Tx, event: MessageEvent): Promise<void> {
     .onConflict((oc) => oc.column('wamid').doNothing())
     .returning('id')
     .executeTakeFirst()
-  if (!inserted) return
+  if (!inserted || !event.countsAsActivity) return
 
   // greatest() ignores NULLs and never moves backwards, so arrival order doesn't matter.
   const column = event.direction === 'inbound' ? 'last_inbound_at' : 'last_outbound_at'

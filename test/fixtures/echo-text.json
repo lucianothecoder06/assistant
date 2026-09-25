@@ -1,0 +1,27 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "102290129340398",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": { "display_phone_number": "15550001111", "phone_number_id": "106540352242922" },
+            "message_echoes": [
+              {
+                "from": "15550001111",
+                "to": "5215512345678",
+                "id": "wamid.ECHO_OUT_1",
+                "timestamp": "1790154000",
+                "type": "text",
+                "text": { "body": "¡Hola María José! Sí, el sofá sigue disponible. Te mando la cotización hoy." }
+              }
+            ]
+          },
+          "field": "smb_message_echoes"
+        }
+      ]
+    }
+  ]
+}
