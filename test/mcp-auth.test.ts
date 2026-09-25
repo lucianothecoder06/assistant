@@ -140,4 +140,30 @@ describe('owner-only access', () => {
     const res = await mcpRequest(ctx.baseUrl, INITIALIZE, flow.tokens.access_token)
     expect(res.status).toBe(200)
   })
+
+  it('refreshes tokens, and the documented revocation stops refreshes', async () => {
+    const flow = await runOAuthFlow(ctx.baseUrl, owner, { ip: '203.0.113.20' })
+    if (!flow.ok) throw new Error('flow failed')
+    expect(flow.tokens.refresh_token).toBeTruthy()
+
+    const refresh = () =>
+      fetch(`${ctx.baseUrl}/api/auth/oauth2/token`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: flow.tokens.refresh_token!, client_id: flow.client.client_id }),
+      })
+    const refreshed = await refresh()
+    expect(refreshed.status).toBe(200)
+    const next = await refreshed.json()
+    expect((await mcpRequest(ctx.baseUrl, INITIALIZE, next.access_token)).status).toBe(200)
+
+    await sql`delete from "oauthClient"`.execute(ctx.db)
+    await sql`delete from session`.execute(ctx.db)
+    const afterRevoke = await fetch(`${ctx.baseUrl}/api/auth/oauth2/token`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: next.refresh_token, client_id: flow.client.client_id }),
+    })
+    expect(afterRevoke.ok).toBe(false)
+  })
 })

@@ -132,7 +132,7 @@ Access tokens last 1 hour and claude.ai refreshes them automatically.
 
 ```bash
 npm ci
-npm test            # 55 tests, in-memory Postgres, no network or Docker
+npm test            # in-memory Postgres, no network or Docker
 npm run typecheck
 npm run dev         # needs .env with a real DATABASE_URL
 ```
