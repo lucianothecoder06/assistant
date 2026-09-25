@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import type { AppDeps } from '../app.js'
+import type { AppDeps } from '../create-app.js'
 import { drainPendingEvents, processEvent } from '../ingest/processor.js'
 import { safeEqual, verifyMetaSignature } from '../whatsapp/signature.js'
 
