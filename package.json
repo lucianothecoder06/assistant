@@ -8,7 +8,9 @@
     "test": "vitest run",
     "db:migrate": "tsx scripts/migrate.ts",
     "owner:create": "tsx scripts/create-owner.ts",
-    "whatsapp:sync": "tsx scripts/request-sync.ts"
+    "whatsapp:sync": "tsx scripts/request-sync.ts",
+    "demo:seed": "tsx scripts/demo.ts seed",
+    "demo:clear": "tsx scripts/demo.ts clear"
   },
   "repository": {
     "type": "git",

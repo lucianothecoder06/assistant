@@ -128,6 +128,17 @@ Access tokens last 1 hour and claude.ai refreshes them automatically.
 
 **To revoke access:** delete the registered OAuth clients (`delete from "oauthClient";`) and sessions (`delete from session;`). Refreshing then fails right away. Access tokens are stateless JWTs, so one already issued keeps working until it expires, which is at most 1 hour. Reconnecting in claude.ai registers a new client.
 
+## Try it with demo data
+
+Before a real number is connected, you can load 8 fake contacts and ~30 Spanish messages. They're sent through the real webhook path, signed with your `META_APP_SECRET`:
+
+```bash
+npm run demo:seed    # needs BASE_URL and META_APP_SECRET in .env.local
+npm run demo:clear   # removes only the demo data (phone numbers starting 52155500000)
+```
+
+Then ask Claude things like *"¿quién está esperando respuesta?"* or *"busca la cotización del sofá"*.
+
 ## Local development
 
 ```bash
