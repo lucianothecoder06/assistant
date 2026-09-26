@@ -1,11 +1,12 @@
 // Applies app migrations, then creates/updates Better Auth's tables. Run on every deploy (idempotent).
+import './load-env.js'
 import { getMigrations } from 'better-auth/db/migration'
 import { authOptions } from '../src/auth/auth.js'
 import { createDb } from '../src/db/client.js'
 import { migrateToLatest } from '../src/db/migrate.js'
-import { readEnv } from '../src/env.js'
+import { AUTH_KEYS, readEnv } from '../src/env.js'
 
-const env = readEnv()
+const env = readEnv(process.env, AUTH_KEYS)
 const db = createDb(env.DATABASE_URL)
 try {
   await migrateToLatest(db)

@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "Personal read-only WhatsApp archive exposed as a remote MCP server",
   "scripts": {
-    "dev": "tsx watch --env-file-if-exists=.env scripts/dev.ts",
+    "dev": "tsx watch scripts/dev.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "db:migrate": "tsx --env-file-if-exists=.env scripts/migrate.ts",
-    "owner:create": "tsx --env-file-if-exists=.env scripts/create-owner.ts",
-    "whatsapp:sync": "tsx --env-file-if-exists=.env scripts/request-sync.ts"
+    "db:migrate": "tsx scripts/migrate.ts",
+    "owner:create": "tsx scripts/create-owner.ts",
+    "whatsapp:sync": "tsx scripts/request-sync.ts"
   },
   "repository": {
     "type": "git",

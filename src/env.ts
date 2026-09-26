@@ -23,15 +23,31 @@ const REQUIRED = [
   'CRON_SECRET',
 ] as const satisfies readonly (keyof Env)[]
 
-export function readEnv(source: Record<string, string | undefined> = process.env): Env {
-  const missing = REQUIRED.filter((key) => !source[key])
+export type AuthEnv = Pick<Env, 'DATABASE_URL' | 'BASE_URL' | 'BETTER_AUTH_SECRET' | 'OWNER_EMAIL'>
+
+/** Just what the database + auth scripts need; they don't touch Meta or cron. */
+export const AUTH_KEYS = ['DATABASE_URL', 'BASE_URL', 'BETTER_AUTH_SECRET', 'OWNER_EMAIL'] as const satisfies readonly (keyof Env)[]
+
+export function readEnv(source?: Record<string, string | undefined>): Env
+export function readEnv<K extends keyof Env>(source: Record<string, string | undefined> | undefined, keys: readonly K[]): Pick<Env, K>
+export function readEnv(
+  input: Record<string, string | undefined> = process.env,
+  keys: readonly (keyof Env)[] = REQUIRED,
+): Partial<Env> {
+  // Vercel's Neon integration prefixes its variables with the name chosen at install time
+  // (e.g. STORAGE_DATABASE_URL, the pooled string). Accept that when DATABASE_URL isn't set.
+  const source: Record<string, string | undefined> = { ...input, DATABASE_URL: input.DATABASE_URL || input.STORAGE_DATABASE_URL }
+  const missing = keys.filter((key) => !source[key])
   if (missing.length > 0) {
-    throw new Error(`Missing required env vars: ${missing.join(', ')}`)
+    throw new Error(
+      `Missing required env vars: ${missing.join(', ')}. ` +
+        'Locally, put them in .env or .env.local (see .env.example); on Vercel, set them in Project → Settings → Environment Variables.',
+    )
   }
-  const env = Object.fromEntries(REQUIRED.map((key) => [key, source[key]!])) as unknown as Env
-  env.BASE_URL = env.BASE_URL.replace(/\/+$/, '')
-  env.OWNER_EMAIL = env.OWNER_EMAIL.toLowerCase()
-  if (env.BETTER_AUTH_SECRET.length < 32) {
+  const env: Partial<Env> = Object.fromEntries(keys.map((key) => [key, source[key]!]))
+  if (env.BASE_URL) env.BASE_URL = env.BASE_URL.replace(/\/+$/, '')
+  if (env.OWNER_EMAIL) env.OWNER_EMAIL = env.OWNER_EMAIL.toLowerCase()
+  if (env.BETTER_AUTH_SECRET && env.BETTER_AUTH_SECRET.length < 32) {
     throw new Error('BETTER_AUTH_SECRET must be at least 32 characters')
   }
   return env

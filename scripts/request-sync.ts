@@ -4,6 +4,8 @@
 //   META_ACCESS_TOKEN=… META_PHONE_NUMBER_ID=… npm run whatsapp:sync
 //
 // Meta then delivers smb_app_state_sync and history webhooks to /webhooks/whatsapp.
+import './load-env.js'
+
 const token = process.env.META_ACCESS_TOKEN
 const phoneNumberId = process.env.META_PHONE_NUMBER_ID
 const version = process.env.META_GRAPH_VERSION ?? 'v23.0'

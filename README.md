@@ -49,7 +49,7 @@ Results are compact JSON and never include the raw webhook payload.
 
 | Variable | Purpose |
 |---|---|
-| `DATABASE_URL` | Neon **pooled** connection string (`…-pooler…`, `sslmode=require`) |
+| `DATABASE_URL` | Neon **pooled** connection string (`…-pooler…`, `sslmode=require`). If you installed Neon from Vercel with a custom prefix, `STORAGE_DATABASE_URL` is accepted as well. |
 | `BASE_URL` | Public origin, e.g. `https://whatsapp-mcp.vercel.app`, with no trailing slash. Must match the URL claude.ai uses. |
 | `BETTER_AUTH_SECRET` | 32+ random characters: `openssl rand -base64 48` |
 | `OWNER_EMAIL` | The only account that can sign in |
@@ -64,7 +64,7 @@ The scripts need these only when you run them, not in Vercel:
 | `OWNER_PASSWORD` | `npm run owner:create` (at least 12 characters) |
 | `META_ACCESS_TOKEN`, `META_PHONE_NUMBER_ID`, `META_GRAPH_VERSION` (default `v23.0`) | `npm run whatsapp:sync` |
 
-Copy `.env.example` to `.env` for local scripts. `.env` is git-ignored.
+For local scripts, put values in `.env.local` (what `vercel env pull` writes) or `.env`. Both are git-ignored and loaded automatically. `db:migrate` and `owner:create` only need `DATABASE_URL`, `BASE_URL`, `BETTER_AUTH_SECRET` and `OWNER_EMAIL`.
 
 ## Deploy (Vercel)
 

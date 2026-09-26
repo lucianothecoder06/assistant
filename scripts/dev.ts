@@ -1,4 +1,5 @@
 // Local server against a real DATABASE_URL: `npm run dev` (reads .env via Node's --env-file if you add it).
+import './load-env.js'
 import { serve } from '@hono/node-server'
 import { createApp } from '../src/create-app.js'
 import { createAuth } from '../src/auth/auth.js'
