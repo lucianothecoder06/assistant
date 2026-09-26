@@ -94,3 +94,13 @@ describe('cron drain', () => {
     expect(await ctx.db.selectFrom('messages').select('wamid').execute()).toEqual([{ wamid: 'wamid.LIVE_IN_1' }])
   })
 })
+
+describe('privacy policy', () => {
+  it('is public and bilingual', async () => {
+    const res = await ctx.app.request('/privacy')
+    expect(res.status).toBe(200)
+    const body = await res.text()
+    expect(body).toContain('Aviso de privacidad')
+    expect(body).toContain('Privacy policy')
+  })
+})

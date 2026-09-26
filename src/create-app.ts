@@ -11,6 +11,7 @@ import type { Env } from './env.js'
 import { drainPendingEvents } from './ingest/processor.js'
 import { createMcpServer } from './mcp/server.js'
 import { webhookRoutes } from './routes/webhook.js'
+import { privacyPage } from './privacy.js'
 import { safeEqual } from './whatsapp/signature.js'
 
 export interface AppDeps {
@@ -28,6 +29,7 @@ export function createApp(deps: AppDeps) {
   app.use(secureHeaders())
 
   app.get('/', (c) => c.text('ok'))
+  app.get('/privacy', (c) => c.html(privacyPage('2026-09-26')))
 
   // --- OAuth (Better Auth) -------------------------------------------------
   // This server protects exactly one resource, so a client that omits RFC 8707 `resource`
